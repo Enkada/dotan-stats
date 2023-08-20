@@ -6,7 +6,7 @@ import { formatTime, getMatchType, timeAgo } from "../Format";
 
 export default function MatchListPage() {    
     const [matches, setMatches] = useState([]);
-    const [isDevVisible, setIsDevVisible] = useState(false);
+    // const [isDevVisible, setIsDevVisible] = useState(false);
     const [isUnrankedVisible, setIsUnrankedVisible] = useState(true);
     const [isUnfinishedVisible, setIsUnfinishedVisible] = useState(false);
 
@@ -29,8 +29,8 @@ export default function MatchListPage() {
 
     let filteredMatches = [...matches];
 
-    if (!isDevVisible)
-        filteredMatches = filteredMatches.filter(x => x.matchID != "0");
+    // if (!isDevVisible)
+    //     filteredMatches = filteredMatches.filter(x => x.matchID != "0");
 
     if (!isUnrankedVisible)
         filteredMatches = filteredMatches.filter(x => x.isRanked != 0);
@@ -42,7 +42,7 @@ export default function MatchListPage() {
         <>
             <div className="match-list">
                 <div className="match-list__parameters">
-                    <label><input type="checkbox" checked={isDevVisible} onChange={() => setIsDevVisible(!isDevVisible)}/> Developer</label>
+                    {/* <label><input type="checkbox" checked={isDevVisible} onChange={() => setIsDevVisible(!isDevVisible)}/> Developer</label> */}
                     <label><input type="checkbox" checked={isUnfinishedVisible} onChange={() => setIsUnfinishedVisible(!isUnfinishedVisible)}/> Unfinished</label>
                     <label><input type="checkbox" checked={isUnrankedVisible} onChange={() => setIsUnrankedVisible(!isUnrankedVisible)}/> Unranked</label>
                 </div>

@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useRef, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { formatPlayerName, formatTime, getMatchType, timeAgo } from "../Format";
+import { formatPlayerName, formatTime, getMatchType, getMedalByMMR, timeAgo } from "../Format";
 
 
 export default function PlayerPage() {
@@ -113,15 +113,16 @@ export default function PlayerPage() {
                 <div className="player__header__name">
                     <a href={"https://steamcommunity.com/profiles/" + id}>{formatPlayerName(steamData.name)}</a>
                 </div>
-                <div className="player__header__mmr"><span className="subtext">MMR:</span> {playerData.mmr}</div>
+                {!!playerData.mmr && <div className="player__header__mmr"><span className="subtext">MMR:</span> {playerData.mmr}</div>}
+                {!!playerData.mmr && <div className="player__header__medal">{getMedalByMMR(playerData.mmr)}</div>}
             </div>
 
             <table className="player__match-list">
                 <thead>
                     <tr>
-                        <th style={{"width": "110px"}}>Match</th>
-                        <th>Hero</th>
-                        <th>Type</th>
+                        <th style={{"width": "120px"}}>Match</th>
+                        <th style={{"width": "73px"}}>Hero</th>
+                        <th style={{"width": "82px"}}>Type</th>
                         <th className="center" style={{"width": "60px"}}>Result</th>
                         <th>Duration</th>
                         <th className="center">K</th>

@@ -35,6 +35,22 @@ export default function HeroPage() {
         return <img src="/loading.gif" className="loading" />;
     }    
 
+    const getPlayerName = (player) => {
+        if (player.steamID64 == "0") {
+            return "Bot";
+        }
+
+        if (player.playerName) {
+            return <Link to={"/player/" + player.steamID64}>{formatPlayerName(player.playerName)}</Link>
+        }
+
+        if (steamData[player.steamID64]) {
+            return <Link to={"/player/" + player.steamID64}>{formatPlayerName(steamData[player.steamID64].name)}</Link>
+        }
+
+        return <Link to={"/player/" + player.steamID64}>Unknown</Link>;
+    }
+
     const getHeroPickRow = () => {
         const heroPicks = matches.filter(x => x.players.some(p => p.hero == name));
 
@@ -53,9 +69,7 @@ export default function HeroPage() {
                     <div><Link to={"/match/" + match.id}>Match #{match.id}</Link></div>
                     <div className="subtext">{timeAgo(match.datetime)}</div>
                 </td>
-                <td>{player.steamID64 == "0" ? "Bot" : 
-                    <Link to={"/player/" + player.steamID64}>{steamData[player.steamID64] ? formatPlayerName(steamData[player.steamID64].name) : "Unknown"}</Link>}
-                </td>
+                <td>{getPlayerName(player)}</td>
                 <td>{!!steamData[player.steamID64] && <img src={steamData[player.steamID64].avatar}/>}</td>                 
                 <td className="center">{formatTime(match.duration)}</td>
                 <td className="center" style={{"width": "84px"}}>{getMatchType(match)}</td>
@@ -109,7 +123,7 @@ export default function HeroPage() {
             <table className="hero__pick-list">
                 <thead>
                     <tr>
-                        <th style={{"width": "110px"}}>Match</th>
+                        <th style={{"width": "120px"}}>Match</th>
                         <th>Player</th>
                         <th style={{"width": "50px"}}></th>
                         <th className="center" style={{"width": "50px"}}>Duration</th>

@@ -17,7 +17,7 @@ export default function MMRPage() {
                 const index = 1 + i * medalGroupSize + j;
                 const medalImage = <img src={"/rank/rank" + index + ".png"}/>;
 
-                const range = <div className="medal-range">
+                const range = <div key={j} className="medal-range">
                     {medalImage}
                     <div className="medal-range__boundaries">
                         <span>{i * (medalGap * medalGroupSize) + j * medalGap}</span>
@@ -28,7 +28,7 @@ export default function MMRPage() {
                 ranges.push(range);
             }
 
-            groups.push(<div className="medal-group">
+            groups.push(<div key={i} className="medal-group">
                 {ranges}
             </div>);
         }
@@ -62,14 +62,18 @@ export default function MMRPage() {
                 The modified formula does not use the following values: seconds of enemy stuns, tower kills, Roshan kills
             </blockquote>
             <p><b>FantasyPoints</b> = Kills * <b>0.3</b> + Deaths * (<b>-0.3</b>) + Assists * <b> 0.15</b> + LastHits * <b>0.003</b> + GPM * <b>0.002</b> + XPM * <b>0.002</b> + Healing * <b>0.0004</b></p>
-            <p>Additionally, a Fantasy Points Factor is calculated, which assumes that by scoring <b>7</b> Fantasy Points, a player can increase the amount of MMR he receives in a win or decrease the amount of MMR deducted in a loss.</p>
+            {/* <p>Additionally, a Fantasy Points Factor is calculated, which assumes that by scoring <b>7</b> Fantasy Points, a player can increase the amount of MMR he receives in a win or decrease the amount of MMR deducted in a loss.</p>
             <p>This works the other way as well, scoring less than <b>7</b> Fantasy Points, a player will gain less or lose more MMR when winning or losing respectively.</p>
-            <p><b>FantasyPointsFactor</b> = (<b>-7</b> + FantasyPoints) * <b>2</b></p>
+            <p><b>FantasyPointsFactor</b> = (<b>-7</b> + FantasyPoints) * <b>2</b></p> */}
             <h3>Final Formula</h3>
             <p>The amount of MMR that each player of the winning team receives is calculated using the following formula:</p>
-            <p><b>MMR Gain</b> = <b>25</b> - TeamSizePenalty + FantasyPointsFactor</p>
+            <p><b>MMR Gain</b> = <b>25</b> - TeamSizePenalty + MAX( (-7 + FantasyPoints) * 2; -15 )</p>
+            <blockquote>
+                <p>The formula sets a threshold of 7 Fantasy Points, a player who gets more than this number will get more MMR for winning, while a player who gets less than this number will get less MMR.</p>
+                <p>The MAX() function sets a limit that prevents a player from losing more than 15 MMR at low Fantasy Point values</p>
+            </blockquote>
             <p>The amount of MMR that each player of the losing team has is calculated using the following formula:</p>
-            <p><b>MMR Loss</b> = <b>-25</b> + TeamSizePenalty + FantasyPointsFactor</p>
+            <p><b>MMR Loss</b> = <b>-25</b> + TeamSizePenalty + FantasyPoints</p>
             <img width={128} style={{"float": "right"}} src="/rank/rank0.png" alt="" />
             <h3>Medals</h3>
             <p>There are 7 categories of medals. There are 5 medals in each category. Each medal has a MMR range of <b>100</b>, all players whose MMR is within that range receive that medal. </p>

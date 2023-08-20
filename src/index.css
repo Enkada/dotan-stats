@@ -142,6 +142,27 @@
   --font-family-ru: monospace;
 }
 
+.rip {
+  margin-bottom: 2em;
+  display: flex;
+  gap: 1em;
+  align-items: center;
+  justify-content: space-between;
+  opacity: 0;
+  animation: arriveTop 1s ease 1s forwards;
+}
+.rip__text {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+.rip img {
+  height: 480px;
+  border-radius: 4px;
+  opacity: 0;
+  animation: arriveTop 1s ease 1.25s forwards;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -231,6 +252,25 @@ table {
   word-break: break-all;
 }
 
+.mmr-link {
+  position: relative;
+  text-decoration: none !important;
+  color: var(--clr-text);
+}
+.mmr-link:hover::after {
+  display: block;
+}
+.mmr-link::after {
+  content: "";
+  display: none;
+  position: absolute;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  translate: 0 3px;
+  border-bottom: 2px dotted var(--clr-subtext);
+}
+
 label:has(input[type=checkbox]) {
   display: flex;
   gap: 0.25em;
@@ -256,6 +296,28 @@ table tbody tr:nth-child(2n+1) {
 table th {
   font-weight: unset;
   text-align: left;
+}
+table th.sortable {
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+table th.sorted {
+  position: relative;
+}
+table th.sorted::after {
+  content: "▼";
+  transform: rotateZ(180deg);
+  position: absolute;
+  color: var(--clr-subtext);
+  translate: -2px 0px;
+  scale: 0.7;
+  transition: transform 0.3s ease;
+}
+table th.sorted.desc::after {
+  transform: rotateZ(0deg);
+  translate: 0 2px;
 }
 table tr {
   opacity: 0;
@@ -319,13 +381,16 @@ header {
 header .logo {
   width: 128px;
   height: 128px;
-  filter: contrast(1.1);
   display: block;
   animation: logo 1.25s ease forwards;
-  transition: scale 0.3s ease;
+  transition: scale 0.3s ease, filter 1s ease;
 }
 header .logo:hover {
   scale: 1.1;
+  filter: contrast(1.1);
+}
+header .logo:active {
+  translate: 0 2px;
 }
 header .dotan-links {
   display: flex;
@@ -393,10 +458,10 @@ main:has(.about, .mmr-info, .player-list) {
   --width: 640px;
 }
 main:has(.player) {
-  --width: 800px;
+  --width: 820px;
 }
 main:has(.hero) {
-  --width: 920px;
+  --width: 940px;
 }
 main:has(.item) {
   --width: 1020px;
@@ -459,9 +524,44 @@ footer {
 .match__team-tables .networth {
   color: gold;
 }
+.match__team-tables .stat-best {
+  position: relative;
+}
+.match__team-tables .stat-best:is(.right)::before {
+  right: 0;
+  translate: -0.5em -10px;
+  width: 4ch;
+}
+.match__team-tables .stat-best::before {
+  content: "";
+  position: absolute;
+  width: calc(100% - 1em);
+  height: 1px;
+  bottom: 0;
+  left: 50%;
+  translate: -50% -10px;
+  background-color: var(--clr-border);
+}
 .match__team-tables table img {
   height: 32px;
   border-radius: 4px;
+}
+.match__team-tables table .hero-portrait {
+  position: relative;
+}
+.match__team-tables table .hero-portrait .medal {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  filter: drop-shadow(1px 1px 2px black);
+  transition: scale 0.2s ease;
+  translate: -4px 2px;
+}
+.match__team-tables table .hero-portrait .medal:hover {
+  scale: 2;
+}
+.match__team-tables table .fantasy {
+  float: right;
 }
 .match__type {
   grid-column: 1/span 3;
@@ -501,22 +601,37 @@ footer {
   border-radius: 4px;
 }
 
-.player-list td:nth-child(1) {
-  height: 50px;
-  width: 50px;
+.player-list__about {
+  padding: 1em;
 }
-.player-list td:nth-child(n+3), .player-list th:nth-child(n+3) {
+.player-list td:nth-child(2) {
+  height: 66px;
+  width: 66px;
+}
+.player-list td:nth-child(n+4), .player-list th:nth-child(n+4) {
   text-align: center;
 }
-
-.about {
-  display: grid;
-  gap: 1em;
+.player-list img {
+  width: 48px;
 }
-.about ul {
-  padding-left: 1em;
-  display: grid;
-  gap: 0.5em;
+.player-list .avatar {
+  border-radius: 4px;
+}
+.player-list .avatar--fake {
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  animation: loadingImage 1s linear infinite;
+  background-image: linear-gradient(45deg, var(--clr-border), var(--clr-highlight));
+  background-size: 200px;
+}
+.player-list .medal {
+  scale: 1.25;
+  translate: 0 2px;
+  transition: scale 0.2s ease;
+}
+.player-list .medal:hover {
+  scale: 2;
 }
 
 .hero {
@@ -547,9 +662,15 @@ footer {
 }
 .player__header {
   display: grid;
-  grid-template-columns: min-content auto;
+  grid-template-columns: min-content auto min-content;
   grid-template-rows: 1fr 1fr;
   gap: 0.5em 1em;
+}
+.player__header:not(:has(.player__header__mmr)) {
+  display: flex;
+}
+.player__header:not(:has(.player__header__mmr)) .player__header__name {
+  align-self: center;
 }
 .player__header__avatar {
   opacity: 0;
@@ -568,6 +689,15 @@ footer {
 .player__header__mmr {
   height: -moz-fit-content;
   height: fit-content;
+}
+.player__header__medal {
+  grid-row: 1/span 2;
+  grid-column: 3;
+  display: grid;
+  align-items: center;
+}
+.player__header__medal img {
+  width: 128px;
 }
 .player__match-list img {
   height: 32px;
@@ -639,6 +769,17 @@ footer {
   to {
     opacity: 1;
     translate: 0 0px;
+  }
+}
+@keyframes loadingImage {
+  0% {
+    background-position: 0px 0px;
+  }
+  50% {
+    background-position: -100px 100px;
+  }
+  100% {
+    background-position: 0px 0px;
   }
 }
 @keyframes loading {

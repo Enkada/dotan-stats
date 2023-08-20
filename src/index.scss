@@ -16,6 +16,30 @@
     --font-family-ru: monospace;
 }
 
+.rip {
+    margin-bottom: 2em;
+    display: flex;
+    gap: 1em;
+    align-items: center;
+    justify-content: space-between;
+
+    opacity: 0;
+    animation: arriveTop 1s ease 1s forwards;
+
+    &__text {
+        display: flex;
+        flex-direction: column;
+        gap: 1em;
+    }
+
+    img {
+        height: 480px;
+        border-radius: 4px;
+        opacity: 0;
+        animation: arriveTop 1s ease 1.25s forwards;
+    }
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -129,6 +153,29 @@ table {
     word-break: break-all;
 }
 
+.mmr-link {
+    position: relative;
+    text-decoration: none !important;
+    color: var(--clr-text);
+
+    &:hover {
+        &::after {
+            display: block;
+        }
+    }
+
+    &::after {
+        content: "";
+        display: none;
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        left: 0;
+        translate: 0 3px;
+        border-bottom: 2px dotted var(--clr-subtext);
+    }
+}
+
 label:has(input[type="checkbox"]) {
     display: flex;
     gap: .25em;    
@@ -159,6 +206,32 @@ table {
     th {
         font-weight: unset;
         text-align: left;
+
+        &.sortable {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        &.sorted {
+            position: relative;
+
+            &::after {
+                content: "▼";
+                transform: rotateZ(180deg);
+                position: absolute;
+                color: var(--clr-subtext);
+                translate: -2px 0px;
+                scale: 0.7;
+                transition: transform .3s ease;
+            }
+
+            &.desc {
+                &::after {
+                    transform: rotateZ(0deg);
+                    translate: 0 2px;
+                }
+            }
+        }
     }
 
     tr {
@@ -235,18 +308,26 @@ header {
     grid-template-columns: 1fr min-content 1fr;
     gap: 1em;
 
+    a:has(.logo) {
+        
+    }
+
     .logo {
         width: 128px;
         height: 128px;
-        filter: contrast(1.1);
         display: block;
 
         animation: logo 1.25s ease forwards;
 
-        transition: scale .3s ease;
+        transition: scale .3s ease, filter 1s ease;
 
         &:hover {
             scale: 1.1;
+            filter: contrast(1.1);
+        }
+
+        &:active {
+            translate: 0 2px;
         }
     }
 
@@ -330,11 +411,11 @@ main {
     }
 
     &:has(.player) {
-        --width: 800px;
+        --width: 820px;
     }
 
     &:has(.hero) {
-        --width: 920px;
+        --width: 940px;
     }    
 
     &:has(.item) {
@@ -424,11 +505,59 @@ footer {
             color: gold;
         }
 
+        .stat-best {
+            position: relative;
+
+            &:is(.right) {
+                &::before {
+                    right: 0;
+                    translate: -.5em -10px;
+                    width: 4ch;
+                }
+            }
+
+            &::before {
+                content: "";
+                position: absolute;
+                width: calc(100% - 1em);
+                height: 1px;
+                bottom: 0;
+                left: 50%;
+                translate: -50% -10px;
+                background-color: var(--clr-border);
+            }
+        }
+
         table {
 
             img {
                 height: 32px;
                 border-radius: 4px;
+            }
+
+            .hero-portrait {
+                position: relative;
+
+                .medal {
+                    position: absolute;
+                    left: 0;
+                    bottom: 0;
+                    filter: drop-shadow(1px 1px 2px black);
+
+                    transition: scale .2s ease;
+
+                    &:hover {
+                        scale: 2;
+                    }
+
+                    translate: -4px 2px;
+                }
+            }
+
+            
+
+            .fantasy {
+                float: right;
             }
         }
     }
@@ -488,27 +617,59 @@ footer {
 
 .player-list {
 
-    td:nth-child(1) {
-        height: 50px;
-        width: 50px;
+    &__about {
+        padding: 1em;
     }
 
-    td:nth-child(n + 3), th:nth-child(n + 3) {
+    td:nth-child(2) {
+        height: 66px;
+        width: 66px;
+    }
+
+    td:nth-child(n + 4), th:nth-child(n + 4) {
         text-align: center;
+    }
+
+    img {
+        width: 48px;
+    }
+
+    .avatar {
+        border-radius: 4px;
+
+        &--fake {
+            width: 48px;
+            height: 48px;
+            border-radius: 4px;
+            animation: loadingImage 1s linear infinite;
+            background-image: linear-gradient(45deg, var(--clr-border), var(--clr-highlight));
+            background-size: 200px;
+        }
+    }
+
+    .medal {
+        scale: 1.25;
+        translate: 0 2px;
+
+        transition: scale .2s ease;
+
+        &:hover {
+            scale: 2;
+        }
     }
 }
 
 // About
 
 .about {
-    display: grid;
-    gap: 1em;
+    // display: grid;
+    // gap: 1em;
 
-    ul {
-        padding-left: 1em;
-        display: grid;
-        gap: .5em;
-    }
+    // ul {
+    //     padding-left: 1em;
+    //     display: grid;
+    //     gap: .5em;
+    // }
 }
 
 // Hero stat page
@@ -550,9 +711,17 @@ footer {
 
     &__header {
         display: grid;
-        grid-template-columns: min-content auto;
+        grid-template-columns: min-content auto min-content;
         grid-template-rows: 1fr 1fr;
         gap: .5em 1em;
+
+        &:not(:has(.player__header__mmr)) {
+            display: flex;
+            
+            .player__header__name {
+                align-self: center;
+            }
+        }
 
         &__avatar {
             opacity: 0;
@@ -572,6 +741,17 @@ footer {
 
         &__mmr {
             height: fit-content;
+        }
+
+        &__medal {
+            grid-row: 1 / span 2;
+            grid-column: 3;
+            display: grid;
+            align-items: center;
+
+            img {
+                width: 128px;
+            }
         }
     }
 
@@ -668,6 +848,18 @@ footer {
     to {
         opacity: 1;
         translate: 0 0px;
+    }
+}
+
+@keyframes loadingImage {
+    0% {
+        background-position: 0px 0px;
+    }
+    50% {
+        background-position: -100px 100px;
+    }
+    100% {
+        background-position: 0px 0px;
     }
 }
 

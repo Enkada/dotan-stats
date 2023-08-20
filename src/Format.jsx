@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export function formatTime(seconds) {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
@@ -17,7 +19,7 @@ export function getMatchType(match) {
         return <span className="subtext">Unfinished</span>;
     }
     else if (match.isRanked != 0) {
-        return "Ranked";
+        return <Link to={"/mmr"} className="mmr-link">Ranked</Link>;
     }
 
     return <span className="subtext">Unranked</span>;
@@ -34,6 +36,20 @@ export function formatPlayerName(name) {
     }
 
     return name;
+}
+
+export function getMedalByMMR(mmr) {
+    if (mmr < 0) {
+        return <img className="medal" src={"/rank/rank0.png"}/>
+    }
+    
+    const index = Math.floor(mmr / 100) + 1;
+    
+    if (index > 35) {
+        return <img className="medal" src={"/rank/rank35.png"}/>
+    }
+
+    return <img className="medal" src={"/rank/rank" + index + ".png"}/>
 }
 
 export function timeAgo(datetimeString) {
