@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useRef, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { formatPlayerName, formatTime, getMatchType, getMedalByMMR, timeAgo } from "../Format";
+import { formatPlayerName, formatTime, getMatchType, getMedalByMMR, timeAgo, asset } from "../Format";
 
 
 export default function PlayerPage() {
@@ -14,7 +14,7 @@ export default function PlayerPage() {
     useEffect(() => {
         const fetchMatches = async () => {
             try {
-                const response = await axios.get("/match/getAll.php");
+                const response = await axios.get("match/getAll.php");
                 setMatches(response.data);
             } catch (error) {
                 console.error(error);
@@ -23,7 +23,7 @@ export default function PlayerPage() {
 
         const fetchSteam = async () => {
             try {
-                const response = await axios.get(`/steam.php/?id=${id}`);
+                const response = await axios.get(`steam.php/?id=${id}`);
                 setSteamData(response.data);
                 document.title = response.data.name + " - DotaN";
             } catch (error) {
@@ -33,7 +33,7 @@ export default function PlayerPage() {
 
         const fetchPlayer = async () => {
             try {
-                const response = await axios.get(`/player/get.php/?steamID64=${id}`);
+                const response = await axios.get(`player/get.php/?steamID64=${id}`);
                 setPlayerData(response.data);
             } catch (error) {
                 console.error(error);
@@ -53,7 +53,7 @@ export default function PlayerPage() {
 
 
     if (!matches.length || !playerData || !steamData) {
-        return <img src="/loading.gif" className="loading" />;
+        return <img src={asset('loading.gif')} className="loading" />;
     }    
 
     const getPlayerMatchRows = () => {
@@ -74,7 +74,7 @@ export default function PlayerPage() {
                 </td>
                 <td>
                     <Link to={"/hero/" + player.hero} className="hero-link">
-                        <img src={"/hero/" + player.hero + ".png"} />
+                        <img src={asset('hero/' + player.hero + '.png')} />
                     </Link>
                 </td>
                 <td>
@@ -94,7 +94,7 @@ export default function PlayerPage() {
                     <div className="item-list">
                     {player.items.map((item, index) => (
                         <Link to={"/item/" + item} className="item-link" key={index}>
-                            <img key={index} src={"/item/" + item + ".png"}/>
+                            <img key={index} src={asset('item/' + item + '.png')}/>
                         </Link>
                     ))}
                     </div>

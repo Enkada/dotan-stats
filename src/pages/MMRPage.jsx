@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
+import { asset } from "../Format";
 
 
 export default function MMRPage() {
@@ -15,7 +16,7 @@ export default function MMRPage() {
             
             for (let j = 0; j < medalGroupSize; j++) {
                 const index = 1 + i * medalGroupSize + j;
-                const medalImage = <img src={"/rank/rank" + index + ".png"}/>;
+                const medalImage = <img src={asset('rank/rank' + index + '.png')}/>;
 
                 const range = <div key={j} className="medal-range">
                     {medalImage}
@@ -74,7 +75,7 @@ export default function MMRPage() {
             </blockquote>
             <p>The amount of MMR that each player of the losing team has is calculated using the following formula:</p>
             <p><b>MMR Loss</b> = <b>-25</b> + TeamSizePenalty + FantasyPoints</p>
-            <img width={128} style={{"float": "right"}} src="/rank/rank0.png" alt="" />
+            <img width={128} style={{"float": "right"}} src={asset('rank/rank0.png')} alt="" />
             <h3>Medals</h3>
             <p>There are 7 categories of medals. There are 5 medals in each category. Each medal has a MMR range of <b>100</b>, all players whose MMR is within that range receive that medal. </p>
             {getRankLine()}

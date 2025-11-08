@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useRef, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { formatPlayerName, formatTime, getMatchType, timeAgo } from "../Format";
+import { formatPlayerName, formatTime, getMatchType, timeAgo, asset } from "../Format";
 
 
 export default function HeroPage() {
@@ -14,7 +14,7 @@ export default function HeroPage() {
     useEffect(() => {
         const fetchMatches = async () => {
             try {
-                const response = await axios.get("/match/getAll.php");
+                const response = await axios.get("match/getAll.php");
                 setMatches(response.data);
             } catch (error) {
                 console.error(error);
@@ -32,7 +32,7 @@ export default function HeroPage() {
 
 
     if (!matches.length) {
-        return <img src="/loading.gif" className="loading" />;
+        return <img src={asset('loading.gif')} className="loading" />;
     }    
 
     const getPlayerName = (player) => {
@@ -81,7 +81,7 @@ export default function HeroPage() {
                     <div className="item-list">
                     {player.items.map((item, index) => (
                         <Link to={"/item/" + item} className="item-link" key={index}>
-                            <img key={index} src={"/item/" + item + ".png"}/>
+                            <img key={index} src={asset('item/' + item + '.png')}/>
                         </Link>
                     ))}
                     </div>
@@ -93,7 +93,7 @@ export default function HeroPage() {
             const playerData = {};
 
             const playerPromises = Array.from(playerSet).map(player => {
-                return axios.get(`/steam.php/?id=${player}`)
+                return axios.get(`steam.php/?id=${player}`)
                 .then(response => {
                     playerData[player] = response.data;
                 });
@@ -116,7 +116,7 @@ export default function HeroPage() {
         <>
         <div className="hero">
             <div className="hero__header">
-                <img className="hero__header__portrait" src={"/hero/" + name + ".png"} />
+                <img className="hero__header__portrait" src={asset('hero/' + name + '.png')} />
                 <div className="hero__header__name hero-name">{name.replace(/_/g, ' ')}</div>
             </div>
 

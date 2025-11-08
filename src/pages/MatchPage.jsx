@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
-import { formatNumberToK, formatPlayerName, formatTime, getMatchType, getMedalByMMR, timeAgo } from "../Format";
+import { formatNumberToK, formatPlayerName, formatTime, getMatchType, getMedalByMMR, timeAgo, asset } from "../Format";
 
 
 export default function MatchPage() {    
@@ -13,7 +13,7 @@ export default function MatchPage() {
     useEffect(() => {
         const fetchMatches = async () => {
             try {
-                const response = await axios.get("/match/get.php/?id=" + id);
+                const response = await axios.get("match/get.php/?id=" + id);
                 setMatch(response.data);
                 document.title = `Match #${response.data.id} - DotaN`
             } catch (error) {
@@ -23,7 +23,7 @@ export default function MatchPage() {
 
         const fetchPlayers = async () => {
             try {
-                const response = await axios.get("/player/getAll.php");
+                const response = await axios.get("player/getAll.php");
                 setPlayersData(response.data);
             } catch (error) {
                 console.error(error);
@@ -45,7 +45,7 @@ export default function MatchPage() {
 
             // Fetch data for each player
             const playerPromises = updatedPlayers.filter(x => x.steamID64 != "0" && !playersData[x.steamID64]).map(player => {
-                return axios.get(`/steam.php/?id=${player.steamID64}`)
+                return axios.get(`steam.php/?id=${player.steamID64}`)
                 .then(response => {
                     const playerData = response.data;
 
@@ -151,7 +151,7 @@ export default function MatchPage() {
                 <tr key={index} style={{"--index": index + 1}}>
                     <td className="hero-portrait" style={{"width": "73px"}}>
                         <Link to={"/hero/" + player.hero} className="hero-link">
-                            <img src={"/hero/" + player.hero + ".png"}></img>
+                            <img src={asset('hero/' + player.hero + '.png')}></img>
                         </Link>
                         {!!(playersData && playersData[player.steamID64]) && getMedalByMMR(playersData[player.steamID64].mmr)}
                     </td>
@@ -179,7 +179,7 @@ export default function MatchPage() {
                         <div className="item-list">
                             {player.items.map((item, index) => (
                                 <Link to={"/item/" + item} className="item-link" key={index}>
-                                    <img src={"/item/" + item + ".png"}/>
+                                    <img src={asset('item/' + item + '.png')}/>
                                 </Link>
                             ))}
                         </div>
@@ -205,7 +205,7 @@ export default function MatchPage() {
     }
 
     if (!match) {
-        return <img src="/loading.gif" className="loading"/>;
+        return <img src={asset('loading.gif')} className="loading"/>;
     }
 
     return (

@@ -175,6 +175,7 @@ body {
   background-color: rgb(0, 0, 0);
   background-image: url("/bg.png");
   background-repeat: no-repeat;
+  background-size: contain;
   -webkit-font-smoothing: none;
   -moz-osx-font-smoothing: none;
   text-rendering: optimizeSpeed;
@@ -632,6 +633,20 @@ footer {
 }
 .player-list .medal:hover {
   scale: 2;
+}
+
+.about {
+  display: grid;
+  grid-template-columns: 5fr 3fr;
+  gap: 1em;
+}
+.about img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: contain;
+  object-fit: contain;
+  opacity: 0;
+  animation: arriveRight 1s ease 0.5s forwards;
 }
 
 .hero {

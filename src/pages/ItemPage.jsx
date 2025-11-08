@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useRef, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { formatPlayerName, formatTime, getMatchType, timeAgo } from "../Format";
+import { formatPlayerName, formatTime, getMatchType, timeAgo, asset } from "../Format";
 
 
 export default function ItemPage() {
@@ -15,7 +15,7 @@ export default function ItemPage() {
     useEffect(() => {
         const fetchMatches = async () => {
             try {
-                const response = await axios.get("/match/getAll.php");
+                const response = await axios.get("match/getAll.php");
                 setMatches(response.data);
             } catch (error) {
                 console.error(error);
@@ -35,7 +35,7 @@ export default function ItemPage() {
 
 
     if (!matches.length || !steamData) {
-        return <img src="/loading.gif" className="loading" />;
+        return <img src={asset('loading.gif')} className="loading" />;
     }    
 
     const getItemMatchRows = () => {
@@ -68,7 +68,7 @@ export default function ItemPage() {
                     </td>
                     <td>
                         <Link to={"/hero/" + player.hero} className="hero-link">
-                            <img src={"/hero/" + player.hero + ".png"} />
+                            <img src={asset('hero/' + player.hero + '.png')} />
                         </Link>
                     </td>
                     <td>{player.steamID64 == "0" ? "Bot" : 
@@ -87,7 +87,7 @@ export default function ItemPage() {
                     <td>
                         <div className="item-list">
                         {player.items.map((itemName, index) => (
-                            <Link to={"/item/" + itemName} className="item-link" key={index}><img className={itemName == name ? "highlighted" : ""} src={"/item/" + itemName + ".png"}/></Link>
+                            <Link to={"/item/" + itemName} className="item-link" key={index}><img className={itemName == name ? "highlighted" : ""} src={asset('item/' + itemName + '.png')}/></Link>
                         ))}
                         </div>
                     </td>
@@ -99,7 +99,7 @@ export default function ItemPage() {
             const playerData = {};
 
             const playerPromises = Array.from(playerSet).map(player => {
-                return axios.get(`/steam.php/?id=${player}`)
+                return axios.get(`steam.php/?id=${player}`)
                 .then(response => {
                     playerData[player] = response.data;
                 });
@@ -123,7 +123,7 @@ export default function ItemPage() {
         <>
         <div className="item">
             <div className="item__header">
-                <img className="item__header__image" src={"/item/" + name + ".png"} />
+                <img className="item__header__image" src={asset('item/' + name + '.png')} />
                 <div className="item__header__name">{name.replace(/_/g, ' ')}</div>
             </div>
 

@@ -1,5 +1,6 @@
 import { useContext, useEffect } from "react";
-import { Link, NavLink, Outlet } from "../node_modules/react-router-dom/dist/index";
+import { Link, NavLink, Outlet } from "react-router-dom";
+import { asset } from './Format';
 
 export default function Layout() {    
     
@@ -10,7 +11,7 @@ export default function Layout() {
                     <a href="https://steamcommunity.com/sharedfiles/filedetails/?id=3005976802"><img src="https://store.steampowered.com/favicon.ico"/></a>
                     <a href="https://www.twitch.tv/uselessmouth"><img src="https://static.twitchcdn.net/assets/favicon-32-e29e246c157142c94346.png"/></a>
                 </div>
-                <NavLink to={"/"}><img className="logo" src="/logo.png" /></NavLink>
+                <NavLink to={"/"}><img className="logo" src={asset('logo.png')} /></NavLink>
                 <nav>
                     <NavLink to={"/"} style={{"--index": 0}}>Matches</NavLink>
                     <NavLink to={"/heroes"} style={{"--index": 1}}>Heroes</NavLink>

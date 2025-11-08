@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Route, Routes } from '../node_modules/react-router-dom/dist/index'
+import { Route, Routes } from 'react-router-dom'
 import Layout from './Layout'
 import MainPage from './MainPage'
 import MatchListPage from './pages/MatchListPage'

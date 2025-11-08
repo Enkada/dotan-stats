@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useRef, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { asset } from "../Format";
 
 
 export default function HeroListPage() {  
@@ -10,7 +11,7 @@ export default function HeroListPage() {
     useEffect(() => {
         const fetchMatches = async () => {
             try {
-                const response = await axios.get("/match/getAll.php");
+                const response = await axios.get("match/getAll.php");
                 setMatches(response.data);
             } catch (error) {
                 console.error(error);
@@ -82,7 +83,7 @@ export default function HeroListPage() {
     }
 
     if (!matches.length) {
-        return <img src="/loading.gif" className="loading" />;
+        return <img src={asset('loading.gif')} className="loading" />;
     }
 
     const heroStats = calculateHeroStats().sort((a, b) => b.picked - a.picked);
@@ -102,7 +103,7 @@ export default function HeroListPage() {
             <tbody>
                 {heroStats.filter(x => x.picked > 0).map((hero, index) => (
                 <tr className="match-list__item" key={index} style={{"--index": index + 1}}>
-                    <td style={{"width": "102px"}}><Link to={"/hero/" + hero.name} className="hero-link"><img src={"hero/" + hero.name + ".png"}></img></Link></td>
+                    <td style={{"width": "102px"}}><Link to={"/hero/" + hero.name} className="hero-link"><img src={asset('hero/' + hero.name + '.png')}></img></Link></td>
                     <td>{hero.picked}</td>
                     <td className="radiant">{hero.wins}</td>
                     <td className="dire">{hero.losses}</td>

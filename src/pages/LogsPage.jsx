@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useRef, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { formatTime } from "../Format";
+import { formatTime, asset } from "../Format";
 
 
 export default function LogsPage() {
@@ -13,7 +13,7 @@ export default function LogsPage() {
     useEffect(() => {
         const fetchMatches = async () => {
             try {
-                const response = await axios.get("/match/getAll.php");
+                const response = await axios.get("match/getAll.php");
                 setMatches(response.data);
             } catch (error) {
                 console.error(error);
@@ -22,7 +22,7 @@ export default function LogsPage() {
 
         const fetchLogs = async () => {
             try {
-                const response = await axios.get(`/get_logs123.php?eblan=aRolf`);
+                const response = await axios.get(`get_logs123.php?eblan=aRolf`);
                 setLogs(response.data);
             } catch (error) {
                 console.error(error);
@@ -35,13 +35,13 @@ export default function LogsPage() {
 
 
     if (!matches.length || !logs.length) {
-        return <img src="/loading.gif" className="loading" />;
+        return <img src={asset('loading.gif')} className="loading" />;
     }
 
     const fetchMatches = async (data) => {
 
         try {
-            const response = await axios.post("/match/add.php", {
+            const response = await axios.post("match/add.php", {
                 data: JSON.stringify(data)
             }, { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
 

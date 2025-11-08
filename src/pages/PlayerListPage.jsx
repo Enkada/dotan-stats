@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useRef, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { formatPlayerName, getMedalByMMR } from "../Format";
+import { formatPlayerName, getMedalByMMR, asset } from "../Format";
 
 
 export default function PlayerListPage() {  
@@ -16,7 +16,7 @@ export default function PlayerListPage() {
     useEffect(() => {
         const fetchMatches = async () => {
             try {
-                const response = await axios.get("/match/getAll.php");
+                const response = await axios.get("match/getAll.php");
                 setMatches(response.data);
             } catch (error) {
                 console.error(error);
@@ -25,7 +25,7 @@ export default function PlayerListPage() {
 
         const fetchPlayers = async () => {
             try {
-                const response = await axios.get("/player/getAll.php");
+                const response = await axios.get("player/getAll.php");
                 setPlayers(response.data);
             } catch (error) {
                 console.error(error);
@@ -93,7 +93,7 @@ export default function PlayerListPage() {
             const playerData = {};
 
             const playerPromises = Object.keys(playerStats).filter(x => !players[x] && playerStats[x].games > 0).map(player => {
-                return axios.get(`/steam.php/?id=${player}`)
+                return axios.get(`steam.php/?id=${player}`)
                 .then(response => {
                     playerData[player] = response.data;
                 });
@@ -113,7 +113,7 @@ export default function PlayerListPage() {
     }
 
     if (!matches.length, !players) {
-        return <img src="/loading.gif" className="loading" />;
+        return <img src={asset('loading.gif')} className="loading" />;
     }
 
     let playerStats = calculatePlayerStats().sort((a, b) =>  (players[b.steamID64]?.mmr ?? 0) - (players[a.steamID64]?.mmr ?? 0));

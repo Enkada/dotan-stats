@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import { formatTime, getMatchType, timeAgo } from "../Format";
+import { formatTime, getMatchType, timeAgo, asset } from "../Format";
 
 
 export default function MatchListPage() {    
@@ -24,7 +24,7 @@ export default function MatchListPage() {
     }, []);
 
     if (!matches.length) {
-        return <img src="/loading.gif" className="loading"/>;
+        return <img src={asset('loading.gif')} className="loading"/>;
     }
 
     let filteredMatches = [...matches];
@@ -76,7 +76,7 @@ export default function MatchListPage() {
                             <td style={{"width": "380px"}}>
                                 <div className={`match-list__item__hero-list ${match.winner == 0 ? "winner" : ""}`}>
                                 {match.players.filter(x => x.team == 0).map((player, index) => (
-                                    <Link to={"/hero/" + player.hero} className="hero-link" key={index}><img src={"hero/" + player.hero + ".png"}></img></Link>
+                                    <Link to={"/hero/" + player.hero} className="hero-link" key={index}><img src={asset('hero/' + player.hero + '.png')}></img></Link>
                                 ))}
                                 </div>
                             </td>
@@ -85,7 +85,7 @@ export default function MatchListPage() {
                             <td style={{"width": "380px"}}>                        
                                 <div className={`match-list__item__hero-list ${match.winner == 1 ? "winner" : ""}`}>
                                 {match.players.filter(x => x.team == 1).map((player, index) => (
-                                    <Link to={"/hero/" + player.hero} className="hero-link" key={index}><img src={"hero/" + player.hero + ".png"}></img></Link>
+                                    <Link to={"/hero/" + player.hero} className="hero-link" key={index}><img src={asset('hero/' + player.hero + '.png')}></img></Link>
                                 ))}
                                 </div>
                             </td>

@@ -1,5 +1,10 @@
 import { Link } from "react-router-dom";
 
+// Prefix static asset paths with Vite base for subdirectory deployments
+export function asset(path) {
+    return import.meta.env.BASE_URL + path.replace(/^\/+/, '');
+}
+
 export function formatTime(seconds) {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
@@ -40,16 +45,16 @@ export function formatPlayerName(name) {
 
 export function getMedalByMMR(mmr) {
     if (mmr < 0) {
-        return <img className="medal" src={"/rank/rank0.png"}/>
+        return <img className="medal" src={asset('rank/rank0.png')}/>
     }
     
     const index = Math.floor(mmr / 100) + 1;
     
     if (index > 35) {
-        return <img className="medal" src={"/rank/rank35.png"}/>
+        return <img className="medal" src={asset('rank/rank35.png')}/>
     }
 
-    return <img className="medal" src={"/rank/rank" + index + ".png"}/>
+    return <img className="medal" src={asset('rank/rank' + index + '.png')}/>
 }
 
 export function timeAgo(datetimeString) {
